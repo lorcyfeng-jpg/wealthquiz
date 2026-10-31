@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>你最适合靠什么搞钱？</title>
+<style>
+:root{--bg:#efeae4;--card:#f7f4ef;--ink:#4a4540;--gold:#bfb1a3;--soft:#e4ddd4;--acc:#a8706a;--mut:#8c8279;box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#2b2725;--card:#35302d;--ink:#ece5dc;--gold:#8f8174;--soft:#413a36;--mut:#a79c91}}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif;line-height:1.6}
+.w{max-width:520px;margin:0 auto;padding:18px 18px 40px}
+h1,h2,h3,.ser{font-family:"Songti SC","Noto Serif SC",Georgia,serif}
+.fade{animation:f .45s ease both}@keyframes f{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.eb{letter-spacing:.3em;font-size:11px;color:var(--gold);margin-top:40px}
+h1{font-size:36px;line-height:1.25;margin:10px 0}
+.sub{color:var(--acc);font-weight:600}
+.card{background:var(--card);border:1px solid var(--gold);border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 6px 20px rgba(90,80,70,.06)}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:600;background:var(--ink);color:var(--bg);cursor:pointer;margin-top:14px}
+.btn.acc{background:var(--acc);color:#fff}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--gold)}
+.btn:disabled{opacity:.35}
+.bar{height:6px;background:var(--soft);border-radius:9px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--acc));transition:width .4s}
+.meta{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.q{font-size:22px;margin:22px 0 14px;line-height:1.45}
+.o{display:flex;gap:10px;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--soft);border-radius:16px;padding:14px;margin:10px 0;font-size:15px;cursor:pointer;transition:.2s}
+.o b{color:var(--gold);font-family:Georgia,serif}.o.on{border-color:var(--acc);background:var(--soft);transform:scale(1.01)}
+.row{display:flex;gap:10px}.row .btn{margin-top:10px}
+.chip{display:inline-block;background:var(--soft);border-radius:99px;padding:3px 10px;font-size:12px;margin:2px 4px 2px 0;color:var(--mut)}
+.big{font-size:54px;font-weight:700;color:var(--acc);line-height:1}
+.pj{border-top:1px dashed var(--gold);margin-top:12px;padding-top:12px;font-size:14px}
+.pj dl{display:grid;grid-template-columns:76px 1fr;gap:4px 8px;margin:8px 0}.pj dt{color:var(--mut)}.pj dd{margin:0}
+.tl{border-left:2px solid var(--gold);margin-left:8px;padding-left:16px}.tl div{position:relative;margin-bottom:14px;font-size:14px}.tl div:before{content:"";position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--acc)}
+.sm{font-size:12px;color:var(--mut)}h3{margin:4px 0 8px;font-size:18px}h2{font-size:22px}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const BG=[["你目前的工作状态",["全职工作","自由职业","学生","暂时没有工作"]],["你每周可以投入多少时间？",["5小时以内","5–10小时","10–20小时","20小时以上"]],["你的启动资金",["0元","500元以内","500–2000元","2000–10000元","10000元以上"]],["你是否愿意露脸？",["愿意","不愿意","视情况而定"]],["你最想实现的目标",["每月多赚1000元","每月多赚3000元","每月多赚8000元以上","建立自己的事业"]]];
+const Q=[
+["如果突然多出一个月的自由时间，你最想做什么？","开一个网店，尝试卖自己喜欢的东西|B3F1","学习剪辑、设计或写作，打造自己的作品|C3A2","研究市场，寻找可以低成本赚钱的信息差|I3T1","尝试做咨询、培训或提供专业服务|S3"],
+["如果朋友告诉你有一个赚钱机会，你首先会：","先研究市场需求和利润空间|I2B2","想想自己能不能做得更有创意|C2A2","先行动，边做边调整|F2B1R2","观察别人是否已经成功，再决定|W2S1"],
+["你最希望哪种收入模式？","每天有订单进来，积少成多|B3T1","一份作品可以反复带来收入|C2W2","凭借专业能力获得高额报酬|S3","建立自己的品牌和商业体系|B2W1A1"],
+["手里有一笔钱可以拿来试错，你更倾向：","小批量进货试销，看市场反应|B2R1","只投入时间，不投入金钱|C1F2","放进长期稳健的计划里慢慢长|W3","投资一项高价值的专业技能|S3"],
+["朋友通常怎么评价你？","点子多，审美在线|A2C2","靠谱，答应的事一定做到|S2W1","消息灵通，什么都知道一点|I3","会聊天，很会带动气氛|T2B1"],
+["周末只有半天，你更想：","逛市集、淘好看的小物|A2B1","拍点视频或写点东西|C3","刷平台，看最近流行什么|T2I2","整理账目，规划下个月开销|W3"],
+["一个项目三个月没起色，你会：","换个方向继续尝试|F3R2","复盘数据，找到流量卡点|T2I1","继续打磨内容，相信时间|C2W1","当作长期资产，保持低强度投入|W3"],
+["你最舒服的工作状态是：","一个人安静做完整件事|C1A1W1","小团队分工合作|B2T1","一对一和客户深入沟通|S3","同时和很多人互动交流|T2C1"],
+["刷到一款爆款商品，你第一反应是：","这个怎么卖、能赚多少|B3","这个包装和视觉真好看|A3","这个流量是怎么来的|T3","这背后的供应链在哪里|I3"],
+["理想中的一天是：","睡到自然醒，想接什么单就接|F3R1","发布一个满意的作品|C3","和客户开会谈合作|S2B1","打开后台看收益在增长|W3"],
+["学一项新技能，你更习惯：","直接上手，边做边学|F2B1","系统上课，拿到证明|S3","看别人的拆解和案例分析|I2T1","模仿爆款，再加自己的东西|C1T2"],
+["如果有3000元可以用，你会：","进一批货试着卖|B3R1","买设备或软件做内容|C2A1","买数据工具、订阅信息源|I2T1","分批放进长期计划|W3"],
+["被邀请分享你的经验，你会：","乐意上台讲|S2C1","写成文章发出去|C2","更想在幕后策划整件事|T2I1","私下一对一聊最自在|S2"],
+["逛街时你最先注意到：","配色、材质和整体质感|A3","价格与目标人群|B2I1","为什么这家店在排队|I2T2","店主的故事和品牌感|B1A1C1"],
+["某个月收入忽高忽低，你的感受是：","有点兴奋，说明有机会|F2R3","焦虑，想要更稳定|W3","立刻调整产品和价格|B2T1","还好，有专业客户兜底|S3"],
+["朋友经常找你帮忙做什么？","修图、排版、搭配|A3","想文案、出点子|C3","查资料、比价、做攻略|I3","翻译、辅导、讲解|S3"],
+["如果每天只有一小时，你会：","稳定更新内容|C2W1","回复客户、处理订单|B2T1","练习并打磨专业技能|S2W1","看当天状态，灵活安排|F3"],
+["你更想做哪种规模的生意？","小而美，有自己的风格|A2F1","薄利多销，走量|B2T2","客户少但客单价高|S3","慢慢积累，最后能稳定产生现金流|W3"],
+["在社交平台上，你更像：","发布者，爱分享作品|C3","评论区活跃的互动者|T2","收藏党，爱研究别人怎么做|I2","潜水观察者|W1F1"],
+["如何看待一次副业失败？","当学费，马上开始下一个|F3R2","复盘数据找出原因|I2T1","很难受，想更稳一点|W2","先小规模试，再决定放大|B2R1"],
+["下面哪种说法最吸引你？","拥有自己的个人品牌|B1C2S1","在任何地方都能工作|F3","在行业里有专业口碑|S3","账号涨粉、被很多人看见|T3"],
+["想说服别人时，你更常：","讲一个打动人的故事|C2T1","拿数据说话|I3","直接展示成品|A3","用长期合作建立信任|S2W1"],
+["看到一个市场空白，你会：","做一款自己的产品去填补|B3R1","做内容吸引有需求的人|C2T1","做资源整合，撮合双方|I2B1","做一个长期慢慢积累的项目|W3"],
+["五年后你最想成为：","拥有自己品牌的经营者|B3","作品被认可的创作者|C2A1","行业里的专业人士|S3","被动收入能覆盖开销的人|W3"]];
+const TY="BCAISTWF",M={B:[1,0,1,1,1],C:[0,1,0,1,0],A:[0,1,0,0,0],I:[1,0,0,0,0],S:[0,0,1,1,0],T:[1,0,1,2,1],W:[0,0,2,0,0],F:[0,1,1,0,2],R:[0,0,0,0,1]};
+const DN=["商业洞察力","创造力","执行力","社交影响力","风险承受力"];
+const P={
+B:{n:"商业经营者",e:"🛍️",t:"看见需求，就想把它变成订单",f:"电商 / 跨境 / 个人品牌 / 产品销售",d:"你的高分集中在“产品+订单”选择：看到机会先想怎么卖、怎么赚差价。你把赚钱看成可反复运营的小生意，而不是一次性灵感。",adv:"天然的成交直觉，能快速判断东西卖给谁、卖多少钱。",trap:"急着铺货囤库存，把“有货”当成“有生意”。",bot:"从卖货升级到品牌与复购，需要补数据与供应链管理能力。",mode:"轻资产小店：先预售或小批量验证，再放大。",plan:["选1个细分品类，列出10个竞品的价格与差评","用样品或预售测试3–5单，不囤货","记录成本、售价、物流时长与退货原因","复盘毛利，只保留毛利健康的1–2款"],p:[["一件代发 / 预售小店","在抖音小店、小红书店铺或淘宝选品，先预售后采购","0–800元","5–8小时","3–8周","中","平台规则、物流时效、退货","选5款候选品，做3条测试内容，只承接少量订单验证"],["小批量自有品牌","锁定一个细分人群，小批量定制或贴牌销售","2000–10000元","8–15小时","2–4个月","中高","库存积压、质量一致性","确定人群与单品，拿样、拍图、预售20单以内"]]},
+C:{n:"内容创造者",e:"🎬",t:"把想法变成作品，让作品替你工作",f:"短视频 / 自媒体 / 写作 / 知识付费",d:"你在“表达与作品”选项上明显领先：更愿意把想法变成可被看见、可被复用的内容，偏好一份作品长期带来价值。",adv:"作品会随时间产生复利，一旦被认可就有持续曝光。",trap:"只追热点、不做定位，更新三周就耗尽灵感。",bot:"从“有人看”到“有人付费”，需要明确的变现产品。",mode:"个人IP：内容获客 + 产品变现。",plan:["确定一个垂直主题与3个内容栏目","发布前10条内容，固定更新节奏","根据数据保留最好的栏目，做出小产品雏形","开放预约或预售，验证付费意愿"],p:[["不露脸知识 / 图文账号","用图文、配音、录屏做垂直内容，接合作或卖模板","0–800元","6–10小时","2–6个月","中","涨粉慢、平台限流","定位主题，发布12条内容，统计完播与收藏"],["真人出镜 + 知识产品","出镜分享经验，沉淀为课程、社群或咨询","800–5000元","8–12小时","3–6个月","中高","更新压力、变现不确定","拍20条样片，确定风格，上线一个小型付费资料包"]]},
+A:{n:"审美变现者",e:"🎨",t:"你的品味，就是别人愿意多付的溢价",f:"设计 / 穿搭 / 美妆 / 饰品 / 生活方式品牌",d:"你对质感、配色、风格异常敏感，在“看起来对不对”的选择上持续加分。你的优势不是更努力，而是别人愿意为好看和调性付费。",adv:"品味可转化为溢价，能让同类商品卖得更好。",trap:"过度追求完美，迟迟不上线或定价过低。",bot:"需要把审美沉淀成可复制的流程与风格体系。",mode:"作品集接单 → 风格化小品牌。",plan:["整理3–5个作品做成作品集","接1–2个小单（排版、搭配咨询等）","把交付流程做成标准套餐","用自己的风格设计一款小产品预售"],p:[["设计模板与数字素材","制作简历、PPT、小红书排版模板，在素材平台出售","0–400元","5–8小时","1–3个月","低中","同质化竞争","做一套5个模板并上架，测试价格"],["风格化饰品 / 生活小物","设计小批量饰品或家居小物，配合内容销售","2000–10000元","8–12小时","2–5个月","中高","打样成本、库存","确定风格板与3款设计，打样并预售"]]},
+I:{n:"信息猎手",e:"🔎",t:"别人看热闹，你看缺口",f:"市场研究 / 资源整合 / 数字产品",d:"你在“先研究再行动”的选择上突出，习惯用数据和线索判断机会，擅长发现别人尚未注意的缺口。",adv:"发现需求早，擅长筛选与整合，决策更理性。",trap:"研究过度、行动不足，或把信息差当成永久护城河。",bot:"把洞察变成可交付、可复购的产品。",mode:"研究驱动：把信息整理成产品或服务。",plan:["选一个你熟悉的细分领域","整理出第一份趋势或选品清单","发给10位潜在用户收集反馈","设定付费版本并验证"],p:[["选品 / 趋势报告订阅","每月整理细分类目的选品、价格与趋势，卖给小卖家","0–800元","5–8小时","1–3个月","中","信息时效与可信度","选定类目，发布一份免费样刊，收集20条反馈"],["资源对接与采购代理","整合供应商与买家资源，提供寻源、比价与对接","800–5000元","8–12小时","2–4个月","中高","信任成本、交易纠纷","整理10个供应商档案，承接第一个小单"]]},
+S:{n:"专业服务者",e:"🎓",t:"把一项技能，做到别人愿意付费",f:"咨询 / 翻译 / 语言教学 / 技能服务",d:"你在“专业与信任”选项上得分最高：相比规模，更相信把一项技能做到有人愿意付费。你的赚钱曲线通常靠口碑与复购，而非爆发。",adv:"客单价高、客户稳定，变现速度往往最快。",trap:"卖时间换钱，收入被工时封顶；定价过低。",bot:"需要把一对一服务产品化，才能突破时间上限。",mode:"服务产品化：单次服务 → 套餐 → 小班课。",plan:["写清服务对象、成果与价格","找3位熟人试用，拿到真实评价","整理标准流程，推出套餐","发布案例，开放预约"],p:[["在线语言 / 技能辅导","在平台或社群提供一对一辅导，设置体验课与套餐","0–800元","5–10小时","2–6周","低中","时间换收入、学员留存","设计体验课，找3位试学者，收集评价"],["文案 / 翻译 / 咨询套餐","为小企业提供翻译、本地化或咨询的标准套餐","800–4000元","8–15小时","1–2个月","中","获客与定价","做作品集与报价单，联系10位潜在客户"]]},
+T:{n:"流量操盘手",e:"📈",t:"你懂得让对的人看到对的东西",f:"社媒运营 / 广告投放 / 账号运营 / 联盟营销",d:"你在“流量与传播”选项上领先：你关心的是怎样让更多人看到并行动，对平台规则与数据变化有直觉。",adv:"擅长放大内容与产品，能把小需求做成规模。",trap:"依赖单一平台，忽视转化与复购。",bot:"从“做流量”到“做利润”，需要理解产品与成本结构。",mode:"流量服务 / 联盟：先服务别人，再自建流量资产。",plan:["拆解5个对标账号的内容结构","自己运营一个小账号测试一周","记录数据，总结可复制的方法","把方法做成代运营或联盟营销"],p:[["联盟营销 / 测评账号","发布测评内容，通过抖音精选联盟、淘宝联盟等合规渠道获得佣金","0–800元","5–8小时","1–4个月","中","佣金变动、平台政策","选定品类，做10条测评，追踪点击与转化"],["小商家账号代运营","为本地小商家做内容规划、发布与数据复盘","800–4000元","10–15小时","1–3个月","中高","客户期望、交付压力","整理案例，免费试做一周，再谈月度服务"]]},
+W:{n:"资产积累者",e:"🏦",t:"慢一点，但每一步都留下资产",f:"数字产品 / 长期现金流 / 稳健积累",d:"你在“稳定、长期、复利”选项上突出：更看重现金流的安全与可持续。你的路径是慢一点，但每一步都留下可累积的资产。",adv:"耐心强、风险意识高，不易被短期诱惑牵着走。",trap:"过于保守错过试错，或被“稳赚”宣传误导。",bot:"需要在稳健之外保留一小笔试错预算。",mode:"现金流资产：数字产品 + 长期投入。",plan:["盘点可用资金与每月可承受投入","建立收支记录与应急金","选1个可复用的数字产品或长期计划","每月复盘，只加不乱改"],p:[["电子书 / 模板等数字产品","把经验整理成电子书、清单或模板，长期销售","0–400元","4–8小时","2–6个月","低中","销量慢、需要持续推广","确定主题，写出目录与首章，制作试读样章"],["内容资产 + 长期定投计划","建立长期内容库，并按预算做分散的长期投资（非投资建议）","1500–8000元","4–6小时","6个月以上","中","投资可能亏损","设定预算上限，选择分散化产品，建立内容库"]]},
+F:{n:"自由探索者",e:"🧭",t:"用小实验，找到属于你的路",f:"轻创业 / 多项目尝试 / 灵活接单 / 个人工作室",d:"你的答案看似分散，却有共性：偏爱灵活、尝试与自主安排。你擅长在多个小项目之间切换，把试错当成学习。",adv:"适应力强，敢于开始，容易发现意外机会。",trap:"同时开太多项目，没有一个做出结果。",bot:"需要设置聚焦期，让一个项目至少做满90天。",mode:"轻创业工作室：小项目组合，每季度保留最优的一个。",plan:["列出3个想试的小项目","每个只做7天最小测试","保留数据最好的一个","接下来两周专注拿到第一笔收入"],p:[["灵活接单（远程助理 / 整理 / 小任务）","在自由职业平台接小任务，积累评价与技能","0–400元","5–10小时","2–6周","低","收入不稳定、平台抽成","注册平台，做3个样例，接前2单"],["个人工作室 + 小产品组合","以工作室名义提供服务并测试2–3个小产品","800–5000元","8–15小时","2–4个月","中","精力分散","定义工作室定位，上线2个最小产品并收集反馈"]]}};
+const steps=[...BG.map(b=>({q:b[0],o:b[1],bg:1})),...Q.map(q=>({q:q[0],o:q.slice(1).map(x=>x.split("|")[0]),code:q.slice(1).map(x=>x.split("|")[1])}))];
+let i=-1,ans=[];const $=document.getElementById("app");
+const L="ABCDE";
+function start(){i=-1;ans=[];draw()}
+function draw(){window.scrollTo(0,0);if(i<0)return $.innerHTML=`<div class="fade"><div class="eb">WEALTH PERSONALITY TEST</div><h1 class="ser">你最适合靠什么搞钱？</h1><p class="sub">测测你的财富人格，找到最适合自己的赚钱赛道。</p><div class="card"><p>有人靠创意赚钱，有人靠信息差赚钱，有人靠审美赚钱，也有人天生适合做生意。</p><p>你真的适合现在的工作和赚钱方式吗？</p><p>通过 24 道情境心理测试，找到你的财富人格，发现最适合你的副业方向。</p><span class="chip">无需登录</span><span class="chip">约5分钟</span><span class="chip">结果由真实算法计算</span></div><button class="btn" onclick="i=0;draw()">开始探索我的财富天赋</button><p class="sm">先回答5个背景问题，再进入24道情境题。刷新页面将重新开始。</p></div>`;
+if(i>=steps.length)return result();
+const s=steps[i],pct=Math.round(i/steps.length*100),lab=s.bg?`背景 ${i+1}/5`:`情境题 ${i-4}/24`;
+$.innerHTML=`<div class="fade" key="${i}"><div class="meta"><span>${lab}</span><span>${i+1} / ${steps.length}</span></div><div class="bar"><i style="width:${pct+3}%"></i></div><div class="q ser">${s.q}</div>${s.o.map((t,k)=>`<button class="o ${ans[i]===k?"on":""}" onclick="pick(${k})"><b>${L[k]}</b><span>${t}</span></button>`).join("")}<div class="row"><button class="btn ghost" onclick="i--;draw()">${i?"上一题":"返回"}</button><button class="btn" id="nx" ${ans[i]==null?"disabled":""} onclick="i++;draw()">${i==steps.length-1?"查看我的报告":"下一题"}</button></div></div>`}
+function pick(k){ans[i]=k;document.querySelectorAll(".o").forEach((e,j)=>e.classList.toggle("on",j==k));document.getElementById("nx").disabled=false}
+function parse(c){return[...c.matchAll(/([A-Z])(\d)/g)].map(m=>[m[1],+m[2]])}
+function calc(){const sc={},mx={};TY.split("").forEach(t=>sc[t]=mx[t]=0);let d=[0,0,0,0,0],dm=[0,0,0,0,0];
+steps.forEach((s,k)=>{if(s.bg)return;const per={},pd=[0,0,0,0,0];s.code.forEach((c,j)=>{const cur={},cd=[0,0,0,0,0];parse(c).forEach(([l,w])=>{if(TY.includes(l)){cur[l]=w;if(j==ans[k])sc[l]+=w}(M[l]||[]).forEach((v,x)=>cd[x]+=v*w);if(j==ans[k])(M[l]||[]).forEach((v,x)=>d[x]+=v*w)});for(const l in cur)per[l]=Math.max(per[l]||0,cur[l]);cd.forEach((v,x)=>pd[x]=Math.max(pd[x],v))});for(const l in per)mx[l]+=per[l];pd.forEach((v,x)=>dm[x]+=v)});
+const [job,hr,cash,face,goal]=ans,adj={B:1,C:1,A:1,I:1,S:1,T:1,W:1,F:1};
+if(face==1){adj.C*=.85;adj.T*=.92}if(face==0){adj.C*=1.04;adj.S*=1.04}
+if(cash==0){adj.B*=.9;adj.W*=.9}if(cash>=3){adj.B*=1.05;adj.W*=1.05}
+if(hr==0){adj.W*=1.05;adj.F*=.92}if(hr==3){adj.B*=1.04;adj.C*=1.04}
+if(goal==3){adj.B*=1.05;adj.F*=1.05}if(goal==0){adj.W*=1.03;adj.S*=1.03}
+const sh=TY.split("").map(t=>({t,s:Math.min(1,sc[t]/mx[t]*adj[t])})).sort((a,b)=>b.s-a.s);
+const dims=d.map((v,x)=>Math.round(25+70*Math.min(1,v/dm[x]*1.7)));
+return{sh,dims}}
+function rad(v){const pt=(x,r)=>{const a=-Math.PI/2+x*2*Math.PI/5;return[130+r*Math.cos(a),122+r*Math.sin(a)]};
+const ring=r=>[0,1,2,3,4].map(x=>pt(x,r).join(",")).join(" ");
+return`<svg viewBox="0 0 260 250" style="width:100%;max-width:340px;display:block;margin:auto">${[22,44,66,88].map(r=>`<polygon points="${ring(r)}" fill="none" stroke="var(--gold)" stroke-opacity=".5"/>`).join("")}${[0,1,2,3,4].map(x=>`<line x1="130" y1="122" x2="${pt(x,88)[0]}" y2="${pt(x,88)[1]}" stroke="var(--gold)" stroke-opacity=".4"/>`).join("")}<polygon points="${v.map((n,x)=>pt(x,88*n/100).join(",")).join(" ")}" fill="var(--acc)" fill-opacity=".25" stroke="var(--acc)" stroke-width="2"/>${v.map((n,x)=>{const p=pt(x,106);return`<text x="${p[0]}" y="${p[1]}" font-size="11" text-anchor="middle" fill="var(--ink)">${DN[x]} ${n}</text>`}).join("")}</svg>`}
+let R;
+function result(){R=calc();const{sh,dims}=R,[job,hr,cash,face,goal]=ans,top=P[sh[0].t],pc=s=>Math.min(98,Math.round(100*Math.sqrt(s)));
+const pot=Math.round(.5*dims.reduce((a,b)=>a+b)/5+.3*[40,60,80,95][hr]+.2*[45,55,70,85,95][cash]);
+const jobTxt=["你有全职工作：以兼职节奏推进，固定2–3个夜晚或周末时段，避免影响主业。","你是自由职业者：可以留出整块时间做项目，但要给新项目设定独立预算与止损线。","你是学生：利用课余低成本试错，优先做能积累作品与评价的项目，别影响学业。","你目前没有工作：先用最小投入拿到第一笔收入，同时保留好生活现金，不要孤注一掷。"][job];
+const v=(face!=1&&cash>=2)?1:0;
+const risk=dims[4]>65?"你的风险承受力较高，更要提前设定止损线。":"你的风险承受力偏稳，建议从最小成本的版本开始。";
+window.cur={top,pct:pc(sh[0].s),sh,dims,v};
+$.innerHTML=`<div class="fade"><div class="card" style="text-align:center;background:linear-gradient(160deg,var(--card),var(--soft))"><div class="eb" style="margin-top:6px">我的财富人格</div><div style="font-size:54px">${top.e}</div><h1 class="ser" style="margin:4px 0">${top.n}</h1><p class="sub">${top.t}</p><div class="big">${pc(sh[0].s)}%</div><div class="sm">财富人格指数（与该人格的匹配度）</div><p style="text-align:left;font-size:14px">${top.d}</p><span class="chip">${top.f}</span></div>
+<div class="card"><h3 class="ser">五维能力雷达图</h3>${rad(dims)}<p class="sm">由你的24道题答案累计计算，不含任何随机成分。</p></div>
+<div class="card"><h3 class="ser">财富潜力评分：${pot}</h3><div class="bar"><i style="width:${pot}%"></i></div><p class="sm">综合能力倾向、每周时间与启动资金得出的“准备度”评分，不代表收入预测或成功概率。</p></div>
+<h2 class="ser">最适合你的3个赚钱赛道</h2>${sh.slice(0,3).map((x,k)=>{const q=P[x.t],p=q.p[v];return`<div class="card"><span class="chip">No.${k+1} · 匹配 ${pc(x.s)}%</span><h3 class="ser">${q.e} ${q.n}方向：${p[0]}</h3><div class="sm">${q.f}</div><div class="pj"><dl><dt>赚钱方式</dt><dd>${p[1]}</dd><dt>启动资金</dt><dd>${p[2]}</dd><dt>每周投入</dt><dd>${p[3]}</dd><dt>变现周期</dt><dd>${p[4]}（仅为预估）</dd><dt>难度</dt><dd>${p[5]}</dd><dt>潜在风险</dt><dd>${p[6]}</dd><dt>第一个月</dt><dd>${p[7]}</dd></dl></div></div>`}).join("")}
+<div class="card"><h3 class="ser">💎 隐藏财富优势</h3><p>${top.adv}</p><h3 class="ser">⚠️ 最容易踩的陷阱</h3><p>${top.trap}</p><h3 class="ser">🧱 成长瓶颈</h3><p>${top.bot}</p><h3 class="ser">🚀 适合你的创业模式</h3><p>${top.mode}</p><p class="sm">${jobTxt}${risk}</p></div>
+<div class="card"><h3 class="ser">未来30天行动建议</h3><div class="tl">${top.plan.map((t,k)=>`<div><b>第${k+1}周</b>　${t}</div>`).join("")}</div></div>
+<button class="btn acc" onclick="plan()">生成我的专属搞钱计划</button><div id="plan"></div>
+<div class="row"><button class="btn ghost" onclick="share()">分享测试结果</button><button class="btn ghost" onclick="start()">重新测试</button></div><p class="sm" style="text-align:center">长按或使用手机截屏即可保存结果。所有建议仅供参考，不构成收入承诺或投资建议。</p></div>`}
+function share(){const t=`我的财富人格是「${cur.top.n}」，匹配度${cur.pct}%。你最适合靠什么搞钱？来测测吧：${location.href}`;if(navigator.share)navigator.share({title:"财富人格测试",text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>alert("结果文案已复制，可直接粘贴分享"),()=>alert(t));else alert(t)}
+function plan(){const[job,hr,cash,face,goal]=ans,{top,sh,v}=cur,p=top.p[v],H=["5小时以内","5–10小时","10–20小时","20小时以上"][hr],C=["0元","500元以内","500–2000元","2000–10000元","10000元以上"][cash],G=["每月多赚1000元","每月多赚3000元","每月多赚8000元以上","建立自己的事业"][goal];
+const split=cash==0?"预算为0元：只用时间换验证，先用免费工具，把‘花钱’推迟到出现第一个付费意向之后。":`预算 ${C}：建议约六成用于最小验证，两成用于工具，其余留作备用，不借钱、不加杠杆。`;
+const warn=(goal>=2&&hr<=1)?"你的目标较高而可用时间有限，预计需要更长周期；建议先把目标拆成阶段目标，不必急于一步到位。":(goal==3?"建立事业通常比赚外快更久，建议把前90天定位为验证期，不以收入为唯一指标。":"目标与时间大体匹配，先稳定做满90天再评估。");
+const second=P[sh[1].t].p[v][0];
+document.getElementById("plan").innerHTML=`<div class="card fade"><h3 class="ser">🎯 专属搞钱计划</h3><p><b>起点：</b>${top.n} · 每周${H} · 预算${C} · 目标“${G}” · ${face==1?"不露脸":face==0?"愿意露脸":"视情况露脸"}</p><p><b>主攻项目：</b>${p[0]}（${p[1]}）</p><p><b>备选项目：</b>${second}，当主项目连续4周没有进展时再切换。</p><p><b>时间分配：</b>每周${H}，建议学习约三成、执行约五成、复盘约两成。</p><p><b>资金安排：</b>${split}</p><div class="tl"><div><b>第1–30天 验证</b><br>${p[7]}。目标：拿到至少3条真实用户反馈。</div><div><b>第31–60天 优化</b><br>只保留反馈最好的一个方向，固定交付流程与定价，记录每周数据。</div><div><b>第61–90天 放大或止损</b><br>若已有付费用户，把时间集中在复购与口碑；若60天仍没有任何付费意向，暂停并复盘，或切换备选项目。</div></div><p><b>现实提醒：</b>${warn}</p><p class="sm">主要风险：${p[6]}。以上均为通用规划建议，不代表收入承诺，请根据所在地区的税务和平台规则自行核实。</p></div>`;document.getElementById("plan").scrollIntoView({behavior:"smooth"})}
+draw();
+</script></body></html>
